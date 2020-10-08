@@ -1,23 +1,26 @@
-package com.lams.clinical.clinicalapp.beans;
+package com.lams.clinical.clinicalapp.entities;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.Size;
 
 @Entity
-public class Cliente {
+public class Patient {
 	
 	@Id
 	@GeneratedValue
 	private Integer id;
 	
 	@Size(min = 3, max = 20, message = "the registry me must be between 3 and 20 characters")
-	private String name;
+	@Column(name = "first_name")
+	private String firstName;
 	
 	@Size(min = 3, max = 20, message = "the registry me must be between 3 and 20 characters")
+	@Column(name = "last_name")
 	private String lastName;
 	
 	private LocalDate birthdate;
@@ -32,18 +35,26 @@ public class Cliente {
 	
 	private String country;
 	
+	@Column(name = "doc_type")
 	private String docType;
 	
+	@Column(name = "doc_number")
 	private String docNumber;
+	
+	private String email;
 
-	public Cliente(Integer id,
-			@Size(min = 3, max = 20, message = "the registry me must be between 3 and 20 characters") String name,
+	public Patient() {
+		super();
+	}
+
+	public Patient(Integer id,
+			@Size(min = 3, max = 20, message = "the registry me must be between 3 and 20 characters") String firstName,
 			@Size(min = 3, max = 20, message = "the registry me must be between 3 and 20 characters") String lastName,
 			LocalDate birthdate, String sex, Integer phone, String address, String city, String country, String docType,
-			String docNumber) {
+			String docNumber, String email) {
 		super();
 		this.id = id;
-		this.name = name;
+		this.firstName = firstName;
 		this.lastName = lastName;
 		this.birthdate = birthdate;
 		this.sex = sex;
@@ -53,10 +64,7 @@ public class Cliente {
 		this.country = country;
 		this.docType = docType;
 		this.docNumber = docNumber;
-	}
-
-	public Cliente() {
-		super();
+		this.email = email;
 	}
 
 	public Integer getId() {
@@ -67,12 +75,12 @@ public class Cliente {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
 	public String getLastName() {
@@ -146,7 +154,13 @@ public class Cliente {
 	public void setDocNumber(String docNumber) {
 		this.docNumber = docNumber;
 	}
-	
-	
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
 }
