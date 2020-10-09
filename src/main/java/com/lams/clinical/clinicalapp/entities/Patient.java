@@ -6,52 +6,49 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.Size;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "doc_type", "doc_number" }) })
 public class Patient {
-	
+
 	@Id
 	@GeneratedValue
 	private Integer id;
-	
-	@Size(min = 3, max = 20, message = "the registry me must be between 3 and 20 characters")
+
 	@Column(name = "first_name")
 	private String firstName;
-	
-	@Size(min = 3, max = 20, message = "the registry me must be between 3 and 20 characters")
+
 	@Column(name = "last_name")
 	private String lastName;
-	
+
 	private LocalDate birthdate;
-	
+
 	private String sex;
-	
+
 	private Integer phone;
-	
+
 	private String address;
-	
+
 	private String city;
-	
+
 	private String country;
-	
+
 	@Column(name = "doc_type")
 	private String docType;
-	
+
 	@Column(name = "doc_number")
 	private String docNumber;
-	
+
 	private String email;
 
 	public Patient() {
 		super();
 	}
 
-	public Patient(Integer id,
-			@Size(min = 3, max = 20, message = "the registry me must be between 3 and 20 characters") String firstName,
-			@Size(min = 3, max = 20, message = "the registry me must be between 3 and 20 characters") String lastName,
-			LocalDate birthdate, String sex, Integer phone, String address, String city, String country, String docType,
-			String docNumber, String email) {
+	public Patient(Integer id, String firstName, String lastName, LocalDate birthdate, String sex, Integer phone,
+			String address, String city, String country, String docType, String docNumber, String email) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -162,5 +159,5 @@ public class Patient {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
 }
