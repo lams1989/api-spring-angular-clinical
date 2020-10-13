@@ -5,16 +5,22 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.lams.clinical.clinicalapp.dto.PatientDto;
 import com.lams.clinical.clinicalapp.entities.Patient;
 import com.lams.clinical.clinicalapp.exception.PatientIsNotRegisteredException;
+import com.lams.clinical.clinicalapp.exception.ThepatientIsAlreadyRegistered;
 import com.lams.clinical.clinicalapp.mapper.PatientMapper;
 import com.lams.clinical.clinicalapp.repository.ClinicalRepository;
 
 @Service
 public class ClinicalService {
+
+	@Autowired
+	private MessageSource message;
 
 	@Autowired
 	private ClinicalRepository repository;
@@ -33,6 +39,14 @@ public class ClinicalService {
 	}
 
 	public PatientDto save(PatientDto patientDto) {
+		Optional<Patient> patientOpt = repository.findOneByDocTypeAndDocNumber(patientDto.getDocNumber(),
+				patientDto.getDocType());
+
+		if (patientOpt.isPresent()) {
+			throw new ThepatientIsAlreadyRegistered(message.getMessage("error.clinical.patient.create.already.exits",
+					new Object[] { patientDto.getDocType(), patientDto.getDocNumber() },
+					LocaleContextHolder.getLocale()));
+		}
 		Patient patient = new Patient(patientDto.getId(), patientDto.getFirstName(), patientDto.getLastName(),
 				patientDto.getBirthdate(), patientDto.getSex(), patientDto.getPhone(), patientDto.getAddress(),
 				patientDto.getCity(), patientDto.getCountry(), patientDto.getDocType(), patientDto.getDocNumber(),
@@ -43,12 +57,13 @@ public class ClinicalService {
 		return PatientMapper.toDto(patient);
 	}
 
+
 	public PatientDto getId(Integer id) {
 		Optional<Patient> patientOpt = repository.findById(id);
 
 		if (!patientOpt.isPresent()) {
-			throw new PatientIsNotRegisteredException(
-					"The patient with id: " + id + " is not registered in the system");
+			throw new PatientIsNotRegisteredException(message.getMessage("error.clinical.patient.get.is.not.registry",
+					new Integer[] { id }, LocaleContextHolder.getLocale()));
 		}
 		PatientDto patientDto = PatientMapper.toDto(patientOpt.get());
 
@@ -59,8 +74,8 @@ public class ClinicalService {
 		Optional<Patient> patientOpt = repository.findById(id);
 
 		if (!patientOpt.isPresent()) {
-			throw new PatientIsNotRegisteredException(
-					"The patient with id: " + id + " is not registered in the system");
+			throw new PatientIsNotRegisteredException(message.getMessage("error.clinical.patient.set.is.not.registry",
+					new Integer[] { id }, LocaleContextHolder.getLocale()));
 		}
 		PatientDto patientDto = PatientMapper.toDto(patientOpt.get());
 		patientDto.setFirstName(patientDtoIn.getFirstName());
@@ -85,7 +100,8 @@ public class ClinicalService {
 
 		if (!patientOpt.isPresent()) {
 			throw new PatientIsNotRegisteredException(
-					"The patient with id: " + id + " is not registered in the system");
+					message.getMessage("error.clinical.patient.delete.is.not.registry", new Integer[] { id },
+							LocaleContextHolder.getLocale()));
 		} else {
 			repository.deleteById(id);
 		}

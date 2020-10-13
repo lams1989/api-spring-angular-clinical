@@ -2,22 +2,50 @@ package com.lams.clinical.clinicalapp.dto;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties({ "id" })
 public class PatientDto {
 
 	private Integer id;
+	
+	@NotEmpty(message = "{validation.clinical.patient.firstname.not.empty}")
 	private String firstName;
+	
+	@NotEmpty(message = "{validation.clinical.patient.lastname.not.empty}")
 	private String lastName;
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "{validation.clinical.patient.birthday.not.empty}")
+	@Past
 	private LocalDate birthdate;
+	
+	
 	private String sex;
+	
 	private Integer phone;
+	
 	private String address;
+	
 	private String city;
+	
 	private String country;
+	
 	private String docType;
+	
 	private String docNumber;
+	
+	@NotNull
+	@Size(min = 1, max = 100)
+	@Email(message = "{validation.clinical.patient.email.incorret}")
 	private String email;
 	
 	public PatientDto() {
