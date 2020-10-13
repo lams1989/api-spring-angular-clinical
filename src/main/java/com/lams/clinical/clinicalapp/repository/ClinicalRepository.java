@@ -10,7 +10,7 @@ import com.lams.clinical.clinicalapp.entities.Patient;
 @Repository
 public interface ClinicalRepository extends JpaRepository<Patient, Integer>{
 
-	Optional<Patient> findOneByDocTypeAndDocNumber(String docType, String docNumber);
+	Optional<Patient> findByDocNumberAndDocType(String docNumber, String docType);
 
 	Optional<Patient> findByDocNumber(String docNumber);
 
