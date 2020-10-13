@@ -19,4 +19,9 @@ public class Config {
 		return localeResolver;
 
 	}
+
+	@Bean
+	public String getString() {
+		return "bean String";
+	}
 }
