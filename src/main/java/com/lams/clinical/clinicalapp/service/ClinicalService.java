@@ -39,7 +39,7 @@ public class ClinicalService {
 	}
 
 	public PatientDto save(PatientDto patientDto) {
-		Optional<Patient> patientOpt = repository.findOneByDocTypeAndDocNumber(patientDto.getDocNumber(),
+		Optional<Patient> patientOpt = repository.findByDocNumberAndDocType(patientDto.getDocNumber(),
 				patientDto.getDocType());
 
 		if (patientOpt.isPresent()) {
